@@ -303,30 +303,60 @@ public class Wythoff {
 	private int removeStrategically(int x, int y){
 
 
-		if(x==y){
+		//checks to see if there is an win move
+		if(x==y||y==0){
 
 			return x;
 
 		}
 		
+		
+		
+		//these are the needed variables for the below
 		int other = x;
 
 		double golden = ((1+(Math.sqrt(5))/2));
 		
-		//this should work
-		//Wythoff speculated that cold positions in the game
-		//are recusively based off multiples of the golden
-		//ratio. this checks each possible cold position
+		int removed = 0;
+		
+		/*this should work
+		Cold postions in this game are ones that can only
+		lead to the player that creates it to a win.
+		ie) setting it to a cold position means the player
+		has a harder time to win against the computer.
+		Wythoff proved that cold positions in the game
+		are recusively based off multiples of the golden
+		ratio. this checks each possible cold position
+		cold positions as follows:
+		i:   1 | 2 | 3 | 4 | 5 | 6 | 7 | 8
+		x/a: 1 | 3 | 4 | 6 | 8 | 9 | 11| 12
+		y:   2 | 5 | 7 | 10| 13| 15| 18| 20
+		
+		I only check as high as i:8 as 20 is the highest number
+		the game can be set.
+		
+		
+		*/
 		
 		for(int i = 0; i < 8; i++) {
 			
 			int gr = (int) Math.floor(i*golden);
 			
-			if((gr+i)==y){
+			int a = gr+i;
+			
+			if((a)==y){
 				
-				int removed = 0;
+				while(other!=a){
+					other--;
+					removed++;
+				}
 				
-				while(other!=gr){
+				return removed;
+			}
+			
+			if((a)==x){
+				
+				while(other!=a){
 					other--;
 					removed++;
 				}
