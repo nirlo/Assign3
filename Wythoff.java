@@ -217,6 +217,8 @@ public class Wythoff {
 			System.out.print("computer removed "+removed+" from Pile B\n");
 		}
 		
+		
+		//original code for computer move, changed as above
 		/*
 		//ensure that the chosen pile is not empty
 		//the computer will then choose the pile that is not empty
@@ -307,12 +309,35 @@ public class Wythoff {
 
 		}
 		
-		if (x>10||y>10){
-			
-			return 10;
-			
-		}
+		int other = x;
+
+		double golden = ((1+(Math.sqrt(5))/2));
 		
+		//this should work
+		//Wythoff speculated that cold positions in the game
+		//are recusively based off multiples of the golden
+		//ratio. this checks each possible cold position
+		
+		for(int i = 0; i < 8; i++) {
+			
+			int gr = (int) Math.floor(i*golden);
+			
+			if((gr+i)==y){
+				
+				int removed = 0;
+				
+				while(other!=gr){
+					other--;
+					removed++;
+				}
+				
+				return removed;
+			}
+			
+			continue;
+		}
+		  
+
 		return x-1;
 		
 	} //BONUS, given current pile size and other pile size number that should be removed
