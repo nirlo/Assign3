@@ -3,7 +3,7 @@
 * 
 *Assignment 3 - Wythoff Game
 *CST8110 Intro to Computer Programming
-*Section 300
+*Section 302
 *Instructor Howard Rosenblum
 *
 *Program created by Nicholas Lockhart

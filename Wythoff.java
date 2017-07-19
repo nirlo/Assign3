@@ -3,7 +3,7 @@
 * 
 *Assignment 3 - Wythoff Game
 *CST8110 Intro to Computer Programming
-*Section 300
+*Section 302
 *Instructor Howard Rosenblum
 *
 *Program created by Nicholas Lockhart
@@ -46,17 +46,16 @@ public class Wythoff {
 		
 		String move = input.next();
 		
-		move.toLowerCase();
-		
 		//checks if move is valid
-		while(!(move!="a"||move!="b"||move!="both")){
+		while(!move.equalsIgnoreCase("a")&&!move.equalsIgnoreCase("b")&&!move.equalsIgnoreCase("both")){
 			
-			System.out.print("\nPlease pick Pile A, B, or Both?");
+			System.out.print("Please pick Pile A, B, or Both?");
 			
 			move = input.nextLine();
 			
-			move.toLowerCase();
 		}
+		
+		move = move.toLowerCase();
 		
 		
 		//variable for size use
@@ -216,78 +215,7 @@ public class Wythoff {
 			
 			System.out.print("computer removed "+removed+" from Pile B\n");
 		}
-		
-		
-		//original code for computer move, changed as above
-		/*
-		//ensure that the chosen pile is not empty
-		//the computer will then choose the pile that is not empty
-		
-		if((move==2&&(sizeA==0||sizeB==0))||(sizeA==0||sizeB==0)){
-			
-			if((move==0&&sizeA==0)||move==2&&sizeA==0){
-				move = 1;
-				
-			} 
-			
-			else if((move==1&&sizeB==0)||move==2&&sizeB==0) {
-				move = 0;
-				
-			}
-		}
-		//the chosen pile will now have an amount removed from it
-		//if a or b, it will determine a way to put the piles in a cold position
-		switch(move){
-		
-		
-			case(0):{
-				removed = this.removeStrategically(sizeA, sizeB);
-				System.out.print("computer removed "+removed+" from Pile A\n");
-				pileA.remove(removed);
-			}
-			
-			
-			break;
-			
-			
-			case(1):{
-				removed = this.removeStrategically(sizeB, sizeA);
-				System.out.print("Computer removed "+removed+" from Pile B\n");
-				pileB.remove(removed);
-			}
-			
-			
-			break;
-			
-			
-			case(2):{
-				
-				if(sizeA < sizeB){
-					
-					removed = randomNumber.nextInt(sizeA)+1;
-					
-					System.out.print("Computer removed "+removed+" from both piles\n");
-					
-					pileA.remove(removed);
-					
-					pileB.remove(removed);
-					
-				} 
-				
-				else {
-					
-					removed = randomNumber.nextInt(sizeB)+1;
-					
-					System.out.print("Computer removed "+removed+" from both piles\n");
-					
-					pileA.remove(removed);
-					
-					pileB.remove(removed);
-					
-				}
-			}
-		}
-		*/
+
 		if(this.gameDone()){
 			return false;
 		}
@@ -312,25 +240,30 @@ public class Wythoff {
 		
 		
 		
-		//these are the needed variables for the below
+		//these are the needed variables for the golden wythoff
 		int other = x;
 
-		double golden = ((1+(Math.sqrt(5))/2));
+		double golden = 1.6180339;
 		
 		int removed = 0;
 		
 		/*this should work
 		Cold postions in this game are ones that can only
 		lead to the player that creates it to a win.
-		ie) setting it to a cold position means the player
-		has a harder time to win against the computer.
+		
+		
+		ie) when the computer sets piles to a cold position, the player
+		has a harder time winning against the computer.
+		
+		
 		Wythoff proved that cold positions in the game
 		are recusively based off multiples of the golden
-		ratio. this checks each possible cold position
+		ratio. This loop checks each possible cold position.
 		cold positions as follows:
-		i:   1 | 2 | 3 | 4 | 5 | 6 | 7 | 8
-		x/a: 1 | 3 | 4 | 6 | 8 | 9 | 11| 12
-		y:   2 | 5 | 7 | 10| 13| 15| 18| 20
+		
+		i:   1 | 2 | 3 | 4  | 5  | 6  | 7  | 8
+		a:   1 | 3 | 4 | 6  | 8  | 9  | 11 | 12
+		b:   2 | 5 | 7 | 10 | 13 | 15 | 18 | 20
 		
 		I only check as high as i:8 as 20 is the highest number
 		the game can be set.
@@ -338,13 +271,13 @@ public class Wythoff {
 		
 		*/
 		
-		for(int i = 0; i < 8; i++) {
+		for(int i = 1; i < 8; i++) {
 			
-			int gr = (int) Math.floor(i*golden);
+			int a = (int) Math.floor(i*golden);
 			
-			int a = gr+i;
+			int b = a+i;
 			
-			if((a)==y){
+			if(b==y){
 				
 				while(other!=a){
 					other--;
@@ -354,21 +287,13 @@ public class Wythoff {
 				return removed;
 			}
 			
-			if((a)==x){
-				
-				while(other!=a){
-					other--;
-					removed++;
-				}
-				
-				return removed;
-			}
 			
 			continue;
 		}
-		  
-
-		return x-1;
+		
+		//if it can't make a normal cold move, it will attempt to force
+		// i:1 cold move, the lowest one
+		return x-2;
 		
 	} //BONUS, given current pile size and other pile size number that should be removed
 	
